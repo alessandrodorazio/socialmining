@@ -7,13 +7,15 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
 import org.apache.lucene.analysis.*;
+import preprocessing.TweetDownloader;
 
 import java.nio.file.FileSystems;
 
 
 public class Start {
-public static void main(String[] str) throws Throwable {
-   System.out.println("Start indexing....");
+    public static void main(String[] str) throws Throwable {
+        TweetDownloader t = new TweetDownloader("ids");
+        System.out.println(t.tweets);
 /*   ID_Card[] cards = new ID_Card[2];
     cards[0] = new ID_Card();
     cards[0].Tag="CDxede431";
@@ -37,8 +39,6 @@ public static void main(String[] str) throws Throwable {
     Indexer idx = new Indexer();
     idx.indexing(cards);
 */
-    Searcher searcher = new Searcher();
-    searcher.search("surname","rossi");
-    System.out.println("end");
-}
+
+    }
 }
