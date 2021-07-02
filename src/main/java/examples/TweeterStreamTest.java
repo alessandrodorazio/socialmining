@@ -19,6 +19,7 @@ public class TweeterStreamTest {
 
         StatusListener textOriented = new MyTextListener(); //normal representation
         StatusListener storeOriented = new StoreListener(); //json representation
+        TimeAwareListener timeAware = new TimeAwareListener();
 
         ConfigurationBuilder cfg = new ConfigurationBuilder();
         cfg.setJSONStoreEnabled(true);
@@ -34,15 +35,16 @@ public class TweeterStreamTest {
 
         TwitterStream twitterStream = new TwitterStreamFactory(cfg.build()).getInstance();
 
-        twitterStream.addListener(textOriented);
+        twitterStream.addListener(timeAware);
+        //twitterStream.addListener(textOriented);
         //twitterStream.addListener(storeOriented);
 
-        // twitterStream.sample();
-
+         twitterStream.sample();
+        /*
         FilterQuery fq = new FilterQuery();
         String[] queryText = {"Astrazeneca","Phizer","vaccine"};
         fq.track(queryText);
         twitterStream.filter(fq);
-
+        */
     }
 }
