@@ -51,12 +51,11 @@ public class Scraper {
     public void extractBaseInfo(Document doc, ArrayList<Event> events){
         System.out.println("Scanning web page....");
 
-        Elements heds = doc.select(".block__heading .link");
-        Elements dates = doc.select("spam.text-sm:nth-child(2)");
-        Elements places = doc.select(".text-sn a");
+        Elements heds = doc.select("article:o-link-text u-block");
+        Elements dates = doc.select("u-label-07 u-ml-medium u-inline-block");
+        Elements places = doc.select("u-label-07 u-ml-medium u-inline-block");
 
         for(int i= 0; i< heds.size(); i++){
-            System.out.println(i);
             Event event = new Event();
             event.Url= baseurl + heds.get(i).attr("href");
 

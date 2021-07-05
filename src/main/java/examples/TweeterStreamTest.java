@@ -35,9 +35,9 @@ public class TweeterStreamTest {
 
         TwitterStream twitterStream = new TwitterStreamFactory(cfg.build()).getInstance();
 
-        twitterStream.addListener(timeAware);
+        //twitterStream.addListener(timeAware);
         //twitterStream.addListener(textOriented);
-        //twitterStream.addListener(storeOriented);
+        twitterStream.addListener(storeOriented);
 
          twitterStream.sample();
         /*
