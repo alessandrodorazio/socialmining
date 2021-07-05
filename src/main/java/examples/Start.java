@@ -15,7 +15,7 @@ import java.nio.file.FileSystems;
 public class Start {
     public static void main(String[] str) throws Throwable {
         TweetDownloader t = new TweetDownloader("ids");
-        System.out.println(t.tweets);
+        System.out.println("Ho finito");
 /*   ID_Card[] cards = new ID_Card[2];
     cards[0] = new ID_Card();
     cards[0].Tag="CDxede431";
