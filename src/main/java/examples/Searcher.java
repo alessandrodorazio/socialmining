@@ -34,7 +34,7 @@ public class Searcher {
 
         Document doc=null;
         for(ScoreDoc entry:hits){
-// load document in memory (only the stored filed are available)
+        // load document in memory (only the stored filed are available)
             doc=is.doc(entry.doc); /* the same as ir.document(entry.doc); */
             System.out.println("tag: "+doc.get("tag"));
             System.out.println("surname: "+doc.get("surname"));
@@ -251,3 +251,103 @@ public class Searcher {
         "timestamp_ms": "1625494980659"
         }
 */
+/*
+{
+        "created_at": "Sat Jan 16 00:01:25 +0000 2021",
+        "id": 1350231647787081700,
+        "id_str": "1350231647787081730",
+        "text": "@joemartin66 I know several people who have been vaccinated, including three who got their vaccination today. My ne… https://t.co/YvjWHBQYLS",
+        "truncated": true,
+        "entities": {
+        "hashtags": [],
+        "symbols": [],
+        "user_mentions": [
+        {
+        "screen_name": "joemartin66",
+        "name": "Joey Martin 🌈",
+        "id": 246309522,
+        "id_str": "246309522",
+        "indices": [
+        0,
+        12
+        ]
+        }
+        ],
+        "urls": [
+        {
+        "url": "https://t.co/YvjWHBQYLS",
+        "expanded_url": "https://twitter.com/i/web/status/1350231647787081730",
+        "display_url": "twitter.com/i/web/status/1…",
+        "indices": [
+        117,
+        140
+        ]
+        }
+        ]
+        },
+        "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+        "in_reply_to_status_id": 1350126342692622300,
+        "in_reply_to_status_id_str": "1350126342692622341",
+        "in_reply_to_user_id": 246309522,
+        "in_reply_to_user_id_str": "246309522",
+        "in_reply_to_screen_name": "joemartin66",
+        "user": {
+        "id": 806193800674680800,
+        "id_str": "806193800674680832",
+        "name": "Iain M 💙💛",
+        "screen_name": "Iain57512878",
+        "location": "Leeds, England",
+        "description": "",
+        "url": null,
+        "entities": {
+        "description": {
+        "urls": []
+        }
+        },
+        "protected": false,
+        "followers_count": 1126,
+        "friends_count": 405,
+        "listed_count": 0,
+        "created_at": "Tue Dec 06 17:49:15 +0000 2016",
+        "favourites_count": 103410,
+        "utc_offset": null,
+        "time_zone": null,
+        "geo_enabled": false,
+        "verified": false,
+        "statuses_count": 1465,
+        "lang": null,
+        "contributors_enabled": false,
+        "is_translator": false,
+        "is_translation_enabled": false,
+        "profile_background_color": "F5F8FA",
+        "profile_background_image_url": null,
+        "profile_background_image_url_https": null,
+        "profile_background_tile": false,
+        "profile_image_url": "http://pbs.twimg.com/profile_images/810624364102250497/euiu7g_i_normal.jpg",
+        "profile_image_url_https": "https://pbs.twimg.com/profile_images/810624364102250497/euiu7g_i_normal.jpg",
+        "profile_link_color": "1DA1F2",
+        "profile_sidebar_border_color": "C0DEED",
+        "profile_sidebar_fill_color": "DDEEF6",
+        "profile_text_color": "333333",
+        "profile_use_background_image": true,
+        "has_extended_profile": false,
+        "default_profile": true,
+        "default_profile_image": false,
+        "following": false,
+        "follow_request_sent": false,
+        "notifications": false,
+        "translator_type": "none",
+        "withheld_in_countries": []
+        },
+        "geo": null,
+        "coordinates": null,
+        "place": null,
+        "contributors": null,
+        "is_quote_status": false,
+        "retweet_count": 0,
+        "favorite_count": 0,
+        "favorited": false,
+        "retweeted": false,
+        "lang": "en"
+        }
+        */
