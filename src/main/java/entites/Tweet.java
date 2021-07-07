@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Tweet {
    public  String Created_at, Text, Lang;
-   public  int Id,Retweet_count,Favorite_count;
+   public  int Id,Retweet_count,Favorite_count, author;
    public String User_mentions;
    public static Document doc = new Document();
 

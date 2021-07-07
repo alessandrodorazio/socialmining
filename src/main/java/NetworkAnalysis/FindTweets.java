@@ -4,12 +4,8 @@ package NetworkAnalysis;
 mention other users, and/or retweets other user’s tweets.*/
 
 import entites.Tweet;
-import examples.ID_Card;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.AnalyzerWrapper;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.it.ItalianAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -30,6 +26,7 @@ import java.util.ArrayList;
 
 public class FindTweets {
 
+    //questo metodo serve per trovare i tweet in cui ci sono delle menzioni e memorizzarli una volta trovati(si usa solo una volta)
     public ArrayList<Tweet> find() throws IOException, ParseException {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
         Directory dir = new SimpleFSDirectory(FileSystems.getDefault().getPath("tweets1"));
@@ -76,7 +73,7 @@ public class FindTweets {
         indexReader.close();
         return tweets;
         }
-
+        //questo metodo serve per prendere i tweet trovati con metodo precedente
         public ArrayList<Tweet> getTweets() throws IOException, ParseException {
             ArrayList<Tweet> tweets = new ArrayList<Tweet>();
             Directory dir = new SimpleFSDirectory(FileSystems.getDefault().getPath("tweets2.1"));
