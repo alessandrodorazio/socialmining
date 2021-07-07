@@ -11,7 +11,7 @@ public class Start {
         System.out.println("Starting...");
         FindTweets ft = new FindTweets();
 
-        ArrayList<Tweet> tweets= ft.mentions_and_retweets();
+        ArrayList<Tweet> tweets= ft.find();
 
     }
 }
