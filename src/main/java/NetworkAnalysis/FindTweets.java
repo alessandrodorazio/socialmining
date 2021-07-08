@@ -73,6 +73,8 @@ public class FindTweets {
         indexReader.close();
         return tweets;
         }
+
+
         //questo metodo serve per prendere i tweet trovati con metodo precedente
         public ArrayList<Tweet> getTweets() throws IOException, ParseException {
             ArrayList<Tweet> tweets = new ArrayList<Tweet>();

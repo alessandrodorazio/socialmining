@@ -9,8 +9,7 @@ public class MentionsGraph {
     @Override
     public String toString() {
         return "MentionsGraph{" +
-                "adj=" + adj.values() + adj.keySet()+
-                '}';
+                "from nodes: "+adj.keySet()+ " to [nodes, weights]: " + adj.values() + '}';
     }
 
     public Map<Long, ArrayList<ArrayList<Long>>> adj = new HashMap<>();
@@ -33,9 +32,9 @@ public class MentionsGraph {
         if(!this.adj.get(from).isEmpty()){
             ArrayList<ArrayList<Long>> edges =  getEdges(from);
             for(ArrayList<Long> edge : edges){
-                if(from == edge.get(0) && to == edge.get(1)){ // se trovo due archi uguali aggiungo al arco peso +1
-                    long new_weight= edge.get(2) +1;
-                    edge.set(2,new_weight);
+                if(to == edge.get(0)){ // se trovo due archi uguali aggiungo al arco peso +1
+                    long new_weight= edge.get(1) +1;
+                    edge.set(1,new_weight);
                     modified = true;
                     break;
                 }
@@ -44,7 +43,7 @@ public class MentionsGraph {
         if(!modified) {
             ArrayList<ArrayList<Long>> fromEdges = getEdges(from);
             ArrayList<Long> new_edge = new ArrayList<Long>();
-            new_edge.add(from);
+            //new_edge.add(from);
             new_edge.add(to);
             new_edge.add(weight);
             fromEdges.add(new_edge);

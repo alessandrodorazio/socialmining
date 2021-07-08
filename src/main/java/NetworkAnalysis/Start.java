@@ -39,8 +39,8 @@ public class Start {
         graph2.addEdge(2, 1);
         graph2.addEdge(1, 3);
         graph2.addEdge(1, 2);
-        System.out.println("mentions : "+ graph1);
-        System.out.println("time : " +graph2);
+        System.out.println( graph1);
+        System.out.println( graph2);
 
         /*for(Tweet tweet : tweets) {
           long author = tweet.author;

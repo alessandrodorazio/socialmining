@@ -9,8 +9,7 @@ public class TimeGraph {
     @Override
     public String toString() {
         return "TimeGraph{" +
-                "adj=" + adj.values() + adj.keySet()+
-                '}';
+                "from nodes: "+adj.keySet()+ " to [nodes, weights]: " + adj.values() + '}';
     }
 
     public Map<Long, ArrayList<ArrayList<Long>>> adj = new HashMap<>();
@@ -37,8 +36,8 @@ public class TimeGraph {
         if(!this.adj.get(from).isEmpty()){  //non ce bisogno di fare anche per to perche è un grafo indiretto
             edges1 =  getEdges(from);
             for(ArrayList<Long> edge : edges1){
-                if(from == edge.get(0) && to == edge.get(1)){ // se trovo due archi uguali aggiungo al arco peso +1
-                    edge.set(2,edge.get(2) + 1);
+                if( to == edge.get(0)){ // se trovo due archi uguali aggiungo al arco peso +1
+                    edge.set(1,edge.get(1) + 1);
                     modified = true;
                     break;
                 }
@@ -47,9 +46,9 @@ public class TimeGraph {
             if (modified) {
                 edges2 = getEdges(to);
                 for (ArrayList<Long> edge : edges2) {
-                    if (to == edge.get(0) && from == edge.get(1)) { // se trovo due archi uguali aggiungo al arco peso +1
+                    if (from == edge.get(0)) { // se trovo due archi uguali aggiungo al arco peso +1
 
-                        edge.set(2, edge.get(2) + 1);
+                        edge.set(1, edge.get(1) + 1);
                         modified = true;
                         break;
                     }
@@ -60,14 +59,14 @@ public class TimeGraph {
         if(!modified) {
             ArrayList<ArrayList<Long>> fromEdges = getEdges(from);
             ArrayList<ArrayList<Long>> toEdges = getEdges(to);
+
             ArrayList<Long> new_edge1 = new ArrayList<Long>();
             ArrayList<Long> new_edge2 = new ArrayList<Long>();
-            new_edge1.add(from);
+
             new_edge1.add(to);
             new_edge1.add(weight);
             fromEdges.add(new_edge1);
 
-             new_edge2.add(to);
             new_edge2.add(from);
             new_edge2.add(weight);
             toEdges.add(new_edge2);
