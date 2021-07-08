@@ -22,27 +22,32 @@ public class Start {
         //2.2a
         HashMap<Integer, List<Integer>> mentionsGraph = network.getMentionsGraph(tweets); */
         //2.2b
-        MentionsGraph  graph = new MentionsGraph();
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
-        graph.addEdge(1, 3);
-        graph.addEdge(3, 1);
-        graph.addEdge(2, 1);
-        graph.addEdge(1, 3);
-        graph.addEdge(1, 2);
-        System.out.println(graph);
+        MentionsGraph  graph1 = new MentionsGraph();
+        graph1.addEdge(1, 2);
+        graph1.addEdge(2, 3);
+        graph1.addEdge(1, 3);
+        graph1.addEdge(3, 1);
+        graph1.addEdge(2, 1);
+        graph1.addEdge(1, 3);
+        graph1.addEdge(1, 2);
+
+        TimeGraph  graph2 = new TimeGraph();
+        graph2.addEdge(1, 2);
+        graph2.addEdge(2, 3);
+        graph2.addEdge(1, 3);
+        graph2.addEdge(3, 1);
+        graph2.addEdge(2, 1);
+        graph2.addEdge(1, 3);
+        graph2.addEdge(1, 2);
+        System.out.println("mentions : "+ graph1);
+        System.out.println("time : " +graph2);
+
         /*for(Tweet tweet : tweets) {
           long author = tweet.author;
           for(long user: tweet.User_mentions){
               graph.addEdge(author, user, 1);
           }
-            /*
-            graph.addEdge(1, 2, 10);
-            graph.addEdge(2, 3, 10);
-            graph.addEdge(1, 3, 10);
-            graph.addEdge(3, 1, 10);
-            graph.addEdge(2, 1, 10);
-            System.out.println(graph);*/
+          ;*/
         }
 
 }
