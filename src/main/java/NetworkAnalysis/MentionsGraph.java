@@ -11,7 +11,7 @@ public class MentionsGraph {
                 "from nodes: " + adj.keySet() + " to [nodes, weights]: " + adj.values() + '}';
     }
 
-    public Map<Long, ArrayList<ArrayList<Long>>> adj = new HashMap<>();
+    public HashMap<Long, ArrayList<ArrayList<Long>>> adj = new HashMap<>();
 
     //primo arraylist sono archi il secondo sono le variabili dentro cioe from, to, weight
     public void addVertex(long value) {
@@ -81,7 +81,7 @@ public class MentionsGraph {
         int current_max_size=0;
         for (long k : keys) {
             current_component=find_cc(k);
-            System.out.println("size of components starting by root " + k + " = " + current_component.size() + " with following component : " + current_component);
+            //System.out.println("size of components starting by root " + k + " = " + current_component.size() + " with following component : " + current_component);
 
             //components.add(current_component);
             if (current_max_size < current_component.size()){

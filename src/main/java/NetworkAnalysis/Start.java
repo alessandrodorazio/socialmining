@@ -78,6 +78,8 @@ public class Start {
         graph3.addAllEdges(graph1.largestConnectedComponents());
 
         System.out.println( graph3);
+        Rank rank =new Rank();
+        System.out.println(rank.HITS(graph3.adj));
 
         }
 
