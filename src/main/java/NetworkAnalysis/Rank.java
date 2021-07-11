@@ -1,7 +1,11 @@
 package NetworkAnalysis;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import it.stilo.g.algo.ReachabilityScore;
+import it.stilo.g.algo.UnionDisjoint;
+import it.stilo.g.structures.DoubleValues;
+import it.stilo.g.structures.WeightedDirectedGraph;
+
+import java.util.*;
 
 public class Rank {
     static long zero = 0;
@@ -101,9 +105,85 @@ public class Rank {
    *         for each page p in G do  // then update all hub values
    *             p.hub = p.hub / norm   // normalise the hub values */
 
+//devo prendere i nodi che arrivano a un certo nodo
 
-    void KP_NEG(HashMap<Long, ArrayList<Long>> graph){
+    HashMap<Long,Integer> KP_NEG(HashMap<Long,ArrayList<ArrayList<Long>>> graph){
+        HashMap<Long,Integer> result = new HashMap<>();
+         // compute measure of entire graph
+        int Cg = 0;
 
+        for(Long pointed : graph.keySet()){     //per ogni utente puntato
+
+            //per ottimizare, per controllare se un nodo precedente ha gia puntato a quello che si cerca (riga 174)
+            ArrayList<Long> reached = new ArrayList<>();
+
+            for(Long pointer: graph.keySet()){  // per ogni utente che lo punta - se stesso
+                if(pointed.equals(pointer)){ Cg++; continue;}
+                if(reach(graph,pointer,pointed,reached)) {
+                    reached.add(pointer);
+                    Cg++;
+                    //(kp_neg.get(pointed)).add(pointer);
+                }//implemento bfs fino ad raggiungere nodo
+            }
+        }
+         // compute Cg_vi for each vi
+        System.out.println(Cg);
+         for (Long vi : graph.keySet()){     //per ogni G - vi
+
+             int cg_vi=0;
+             for (Long pointed : graph.keySet()){ //per ogni utente puntato - v
+                 if(pointed.equals(vi)) continue;
+                 ArrayList<Long> reached = new ArrayList<>();    //for optimization nodes that point to pointed
+                 for(Long pointer: graph.keySet()){  // per ogni utente che lo punta - se stesso
+                     if (pointer.equals(vi)) continue;
+                     if(pointed.equals(pointer)){cg_vi++; continue;}
+
+                     if(reach(graph,pointer,pointed,reached)) {//implemento bfs fino ad raggiungere pointed
+                         reached.add(pointer);
+                         cg_vi++;
+                     }
+                 }
+             }
+
+             System.out.println(cg_vi);
+             result.put(vi,cg_vi);
+         }
+
+         for(Long score : result.keySet()){    //compute Cg-cg_vi
+             result.put(score,Cg-result.get(score));
+         }
+        return result;
+    }
+
+
+    public boolean reach(HashMap<Long,ArrayList<ArrayList<Long>>> graph, long start, long end, ArrayList<Long> reached){
+        Queue<ArrayList<Long>> queue = new LinkedList<>();
+
+        ArrayList<Long> visited = new ArrayList<>();
+        ArrayList<ArrayList<Long>> root = graph.get(start);
+
+        if(root.isEmpty()) return false;        //if root is empty return false
+
+        visited.add(start);
+        queue.addAll(root);
+
+        while(!queue.isEmpty()) {
+            ArrayList<ArrayList<Long>> current_root = graph.get(start);
+            if (graph.get(start) == null) return false;
+            for (ArrayList<Long> node : current_root) {
+                if(node.get(1) == end || reached.contains(node.get(1))) return true;
+                if(!visited.contains(node.get(1)) && graph.containsKey(node.get(1))) {
+                    queue.add(node);
+                    visited.add(node.get(1));
+                }
+            }
+            queue.poll();
+            if (!queue.isEmpty()){
+                start=queue.peek().get(1);
+
+            }
+    }
+    return false;
     }
 
     void LPA(HashMap<Long, ArrayList<Long>> graph){
