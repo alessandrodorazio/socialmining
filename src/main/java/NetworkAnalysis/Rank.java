@@ -31,17 +31,17 @@ public class Rank {
                         if (id == arcs.get(1)) {
                             ArrayList<Long> scores = hits.get(arcs.get(0));
                             long qhub = scores.get(2);
-                            new_score.set(1,new_score.get(1) + qhub * arcs.get(2));//p.auth += q.hub *weight of arc
+                            new_score.set(1,new_score.get(1) + (qhub * arcs.get(2)));//p.auth += q.hub *weight of arc
                         }
                     }
                 }
                 //norm += Math.sqrt(new_score.get(1)); // norm += square(p.auth) // calculate the sum of the squared auth values to normalise
                 //norm=1;
             }
-            for (long id : hits.keySet()) { // for each page p in G do  // update the auth scores
+           /* for (long id : hits.keySet()) { // for each page p in G do  // update the auth scores
                 ArrayList<Long> new_score = hits.get(id);
                 //new_score.set(1,new_score.get(1)/norm); //p.auth = p.auth / norm  // normalise the auth values
-            }
+            }*/
             /// simetrico
            // norm = 0;
             for (long id : hits.keySet()) {    // update all hub values first
@@ -52,7 +52,7 @@ public class Rank {
                 for (ArrayList<Long> arc : arcs){   //for each page r in p.outgoingNeighbors do // p.outgoingNeighbors is the set of pages that p links to
                     ArrayList<Long> scores = hits.get(arc.get(1));
                     long rauth = scores.get(2);
-                    new_score.set(2, new_score.get(2) + rauth * arc.get(2));//p.auth += q.hub *weight of arc
+                    new_score.set(2, new_score.get(2) + (rauth * arc.get(2)));//p.auth += q.hub *weight of arc
                 }
                 /*
                 for (long key : graph.keySet()) { //for each page r in p.outgoingNeighbors do // p.outgoingNeighbors is the set of pages that p links to

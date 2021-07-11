@@ -1,6 +1,7 @@
 package NetworkAnalysis;
 
 import entites.Tweet;
+import it.stilo.g.structures.WeightedDirectedGraph;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class Start {
         System.out.println("Mentions Graph first...");
 
         //2.2b
+
         MentionsGraph  graph1 = new MentionsGraph();
         for (Tweet t : tweets){
             long from = Long.parseLong(t.User_ID);
