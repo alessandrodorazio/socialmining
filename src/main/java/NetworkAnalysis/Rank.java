@@ -25,39 +25,43 @@ public class Rank {
         }
         for (int i = 1; i <= steps; i++) {// run the algorithm for k steps
             //int norm = 0;
-
-            for (long id : hits.keySet()) {    // update all authority values first
-                ArrayList<Long> new_score = hits.get(id);
+            HashMap<Long, ArrayList<Long>> new_hits = hits;
+            for (Long id : hits.keySet()) {    // update all authority values first
+                ArrayList<Long> new_score = new_hits.get(id);
+                ArrayList<Long> old_score = hits.get(id);
+                Long actual_score = old_score.get(1);
                 new_score.set(1, zero);//p.auth = 0     new_score = p
 
-                for (long key : graph.keySet()) { //for each page q in p.incomingNeighbors do // p.incomingNeighbors is the set of pages that link to p
+                for (Long key : graph.keySet()) { //for each page q in p.incomingNeighbors do // p.incomingNeighbors is the set of pages that link to p
                     for (ArrayList<Long> arcs : graph.get(key)) {
-                        if (id == arcs.get(1)) {
-                            ArrayList<Long> scores = hits.get(arcs.get(0));
-                            long qhub = scores.get(2);
-                            new_score.set(1,new_score.get(1) + (qhub * arcs.get(2)));//p.auth += q.hub *weight of arc
+                        if (id.equals(arcs.get(1))) {
+                            Long qhub = (hits.get(arcs.get(0))).get(2);     //prende valore hub dalla tabella hits per i nodi q che hanno un arco verso  nodo p
+                            new_score.set(1,old_score.get(1) + (qhub * arcs.get(2)));//p.auth += q.hub *weight of arc
                         }
                     }
                 }
+                if (new_score.get(1).equals(zero)) new_score.set(1,actual_score);
+
                 //norm += Math.sqrt(new_score.get(1)); // norm += square(p.auth) // calculate the sum of the squared auth values to normalise
-                //norm=1;
             }
            /* for (long id : hits.keySet()) { // for each page p in G do  // update the auth scores
                 ArrayList<Long> new_score = hits.get(id);
                 //new_score.set(1,new_score.get(1)/norm); //p.auth = p.auth / norm  // normalise the auth values
-            }*/
-            /// simetrico
-           // norm = 0;
-            for (long id : hits.keySet()) {    // update all hub values first
-                ArrayList<Long> new_score = hits.get(id);
+            }
+            norm = 0;*/
+            for (Long id : hits.keySet()) {    // update all hub values first
+                ArrayList<Long> new_score = new_hits.get(id);
+                ArrayList<Long> old_score = hits.get(id);
+
+                Long actual_score = new_score.get(2);
                 new_score.set(2, zero);//p.hyb = 0
 
                 ArrayList<ArrayList<Long>> arcs = graph.get(id);
                 for (ArrayList<Long> arc : arcs){   //for each page r in p.outgoingNeighbors do // p.outgoingNeighbors is the set of pages that p links to
-                    ArrayList<Long> scores = hits.get(arc.get(1));
-                    long rauth = scores.get(2);
-                    new_score.set(2, new_score.get(2) + (rauth * arc.get(2)));//p.auth += q.hub *weight of arc
+                    Long rauth = (hits.get(arc.get(1))).get(2);
+                    new_score.set(2, old_score.get(2) + (rauth * arc.get(2)));//p.auth += q.hub *weight of arc
                 }
+                if (new_score.get(2).equals(zero)) new_score.set(2,actual_score);
                 /*
                 for (long key : graph.keySet()) { //for each page r in p.outgoingNeighbors do // p.outgoingNeighbors is the set of pages that p links to
                     for (ArrayList<Long> arcs : graph.get(key)) {
@@ -69,43 +73,16 @@ public class Rank {
                     }
                 }*/
                 //norm += Math.sqrt(new_score.get(2)); // norm += square(p.auth) // calculate the sum of the squared auth values to normalise
-               // norm=1;
             }
             /*for (long id : hits.keySet()) { // for each page p in G do  // update the auth scores
                 ArrayList<Long> new_score = hits.get(id);
               //  new_score.set(1,new_score.get(2)/norm); //p.auth = p.auth / norm  // normalise the auth values
             }*/
+            hits = new_hits;
         }
         return hits;
     }
-/*
-// pseudocode given from wikipedia https://en.wikipedia.org/wiki/HITS_algorithm
 
-   *     G := set of pages
-   *     for each page p in G do
-   *         p.auth = 1 // p.auth is the authority score of the page p
-   *         p.hub = 1 // p.hub is the hub score of the page p
-   *     for step from 1 to k do // run the algorithm for k steps
-   *         norm = 0
-   *         for each page p in G do  // update all authority values first
-   *             p.auth = 0
-   *             for each page q in p.incomingNeighbors do // p.incomingNeighbors is the set of pages that link to p
-   *                 p.auth += q.hub
-   *             norm += square(p.auth) // calculate the sum of the squared auth values to normalise
-   *         norm = sqrt(norm)
-   *         for each page p in G do  // update the auth scores
-   *             p.auth = p.auth / norm  // normalise the auth values
-   *         norm = 0
-   *         for each page p in G do  // then update all hub values
-   *             p.hub = 0
-   *             for each page r in p.outgoingNeighbors do // p.outgoingNeighbors is the set of pages that p links to
-   *                 p.hub += r.auth
-   *             norm += square(p.hub) // calculate the sum of the squared hub values to normalise
-   *         norm = sqrt(norm)
-   *         for each page p in G do  // then update all hub values
-   *             p.hub = p.hub / norm   // normalise the hub values */
-
-//devo prendere i nodi che arrivano a un certo nodo
 
     HashMap<Long,Integer> KP_NEG(HashMap<Long,ArrayList<ArrayList<Long>>> graph){
         HashMap<Long,Integer> result = new HashMap<>();
@@ -156,7 +133,7 @@ public class Rank {
     }
 
 
-    public boolean reach(HashMap<Long,ArrayList<ArrayList<Long>>> graph, long start, long end, ArrayList<Long> reached){
+    public boolean reach(HashMap<Long,ArrayList<ArrayList<Long>>> graph, Long start, Long end, ArrayList<Long> reached){
         Queue<ArrayList<Long>> queue = new LinkedList<>();
 
         ArrayList<Long> visited = new ArrayList<>();
@@ -171,7 +148,7 @@ public class Rank {
             ArrayList<ArrayList<Long>> current_root = graph.get(start);
             if (graph.get(start) == null) return false;
             for (ArrayList<Long> node : current_root) {
-                if(node.get(1) == end || reached.contains(node.get(1))) return true;
+                if(node.get(1).equals(end) || reached.contains(node.get(1))) return true;
                 if(!visited.contains(node.get(1)) && graph.containsKey(node.get(1))) {
                     queue.add(node);
                     visited.add(node.get(1));
@@ -186,7 +163,7 @@ public class Rank {
     return false;
     }
 
-    void LPA(HashMap<Long, ArrayList<Long>> graph){
+    void LPA(HashMap<Long, ArrayList<ArrayList<Long>>> graph){
 
     }
 }
