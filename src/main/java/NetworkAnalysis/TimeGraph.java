@@ -10,7 +10,7 @@ public class TimeGraph {
                 "from nodes: "+adj.keySet()+ " to [nodes, weights]: " + adj.values() + '}';
     }
 
-    public Map<Long, ArrayList<ArrayList<Long>>> adj = new HashMap<>();
+    public HashMap<Long, ArrayList<ArrayList<Long>>> adj = new HashMap<>();
 
     //primo arraylist sono archi il secondo sono le variabili dentro cioe from, to, weight
     public void addVertex(long value) {
