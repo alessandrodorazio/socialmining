@@ -166,7 +166,7 @@ public class Rank {
     HashMap<Integer,ArrayList<Long>> LPA(HashMap<Long, ArrayList<ArrayList<Long>>> graph){
 
         HashMap<Integer,ArrayList<Long>> lpa_nodes = new HashMap<>();
-        int initial_size=4;
+        int initial_size=60;
         int num_of_labels = 2;
 
 
