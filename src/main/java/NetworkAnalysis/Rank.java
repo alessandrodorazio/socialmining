@@ -164,8 +164,12 @@ public class Rank {
     }
 
     HashMap<Integer,ArrayList<Long>> LPA(HashMap<Long, ArrayList<ArrayList<Long>>> graph){
+
         HashMap<Integer,ArrayList<Long>> lpa_nodes = new HashMap<>();
-        ;
+        int initial_size=4;
+        int num_of_labels = 2;
+
+
         ArrayList<ArrayList<Long>> labels = new ArrayList<>();
         labels.add(new ArrayList<>());
         lpa_nodes.put(0, labels.get(0));
@@ -178,46 +182,66 @@ public class Rank {
         Long[] node = graph.keySet().toArray(new Long[0]);
         int size = graph.keySet().size();
         Random random = new Random();
+
+        ArrayList<Integer> randoms_label1 = new ArrayList<>();
+        while (randoms_label1.size()!=initial_size-1){
+            int casuale = random.nextInt(size-1);
+            if (!randoms_label1.contains(casuale)) randoms_label1.add(casuale);
+        }
+
+        ArrayList<Integer> randoms_label2 = new ArrayList<>();
+        while (randoms_label2.size()!=initial_size-1){
+            int casuale = random.nextInt(size-1);
+            if (!randoms_label1.contains(casuale) && !randoms_label2.contains(casuale)) randoms_label2.add(casuale);
+        }
+      /*
         int casuale1 = random.nextInt(size-1);
         int casuale2 = random.nextInt(size-1);
         while (casuale1==casuale2){ // nel caso fossero uguali
             casuale2=random.nextInt(size-1);
-        }
-        Long nodo1 = node[casuale1];
-        Long nodo2 = node[casuale2];
+        }*/
+
 
         labels.add ( new ArrayList<>());
         labels.add( new ArrayList<>() );
 
-        labels.get(1).add(nodo1);
-        labels.get(2).add(nodo2);
+        for(Integer num : randoms_label1){
+            Long nodo = node[num];
+            labels.get(1).add(nodo);
+        }
         lpa_nodes.put(1,labels.get(1));
+
+        for(Integer num : randoms_label2){
+            Long nodo = node[num];
+            labels.get(2).add(nodo);
+        }
         lpa_nodes.put(2,labels.get(2));
 
 
-        int num_of_labels = 2;
         //Label propagation
 
 
         ArrayList<Long> new_label0 = new ArrayList<>();
         for (Long vertex : lpa_nodes.get(0)){
-            if(nodo1.equals(vertex) || nodo2.equals(vertex)) continue;
+            if(lpa_nodes.get(1).contains(vertex) || lpa_nodes.get(2).contains(vertex)) continue;
             new_label0.add(vertex);
         }
         lpa_nodes.put(0,new_label0);
 
 
         ArrayList<Long> nodes_already_labeled = new ArrayList<>();
-        nodes_already_labeled.add(nodo1);
-        nodes_already_labeled.add(nodo2);
-
+        nodes_already_labeled.addAll(lpa_nodes.get(1));
+        nodes_already_labeled.addAll(lpa_nodes.get(2));
 
         HashMap<Integer,ArrayList<Long>> nodes_to_visit= new HashMap<>();
         nodes_to_visit.put(1, lpa_nodes.get(1));
         nodes_to_visit.put(2,lpa_nodes.get(2));
 
+
         int iter=1;
-        while (!lpa_nodes.get(0).isEmpty()){  //finche ce almeno un nodo in label0
+        boolean something_to_visit=true;
+        while (!lpa_nodes.get(0).isEmpty() && something_to_visit) {  //finche ce almeno un nodo in label0
+
         System.out.println("nodes_to_visit, while : "+ nodes_to_visit);
             ArrayList<ArrayList<Long>> user_to_add_in_this_iteration = new ArrayList<>();
             user_to_add_in_this_iteration.add(new ArrayList<>()); // non si aggiunge niente al label0
@@ -244,7 +268,7 @@ public class Rank {
             int current_label=0;
             int current_num_of_labels = num_of_labels;
             ArrayList<Long> new_added = new ArrayList<>();
-            System.out.println("user_to_add_in_this_iteration : "+user_to_add_in_this_iteration);
+            //System.out.println("user_to_add_in_this_iteration : "+user_to_add_in_this_iteration);
             for (ArrayList<Long> label : user_to_add_in_this_iteration){//aggiunta nodi ai label
                 ArrayList<Long> next_nodes_to_visit= new ArrayList<>();
                 for (Long user : label){
@@ -254,6 +278,11 @@ public class Rank {
                         if (i == current_label) continue;
 
                         //qui bug da risolvere considera solo il primo label altri no!
+                        if(new_added.contains(user)){
+                            free= false;
+
+                        }
+
                         if (user_to_add_in_this_iteration.get(i).contains(user) && !new_added.contains(user)) {  //se si creo nuovo label e lo aggiungo la
                             free= false;
                             num_of_labels++;
@@ -266,6 +295,7 @@ public class Rank {
                             new_added.add(user);
                         }
 
+
                     }
                     if (free){
                         lpa_nodes.get(current_label).add(user);
@@ -276,22 +306,29 @@ public class Rank {
                     //remove form label0
                     new_label0 = new ArrayList<>();
                     for (Long vertex : lpa_nodes.get(0)){
-                        System.out.println("vertex: " + vertex + ", nodo: "+user);
+                    //    System.out.println("vertex: " + vertex + ", nodo: "+user);
                         if(user.equals(vertex)) continue;
                         new_label0.add(vertex);
                     }
-                    System.out.println("new_label0 : "+new_label0);
+                //    System.out.println("new_label0 : "+new_label0);
                     lpa_nodes.put(0,new_label0);
                 }
                 nodes_to_visit.put(current_label,next_nodes_to_visit);
                 current_label++;
             }
 
-                System.out.println("nodes_to_visit : "+nodes_to_visit);
-                System.out.println("lpa_nodes : "+lpa_nodes);
+            boolean check = false;      //controllare se ci sta almeno un nodo da visitare;
+            for(Integer label_to_visit : nodes_to_visit.keySet()) {
+                if (!nodes_to_visit.get(label_to_visit).isEmpty()) check = true;    //se ce mette check a true
+            }
+            if (!check) something_to_visit=false;   // se e' tutto vuoto while si ferma
+
+/*
+            System.out.println("nodes_to_visit : "+nodes_to_visit);
+            System.out.println("lpa_nodes : "+lpa_nodes);
             System.out.println("");
 
-
+*/
         }
         return lpa_nodes;
     }
