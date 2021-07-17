@@ -1,8 +1,10 @@
 package exercises.ex1;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -40,15 +42,21 @@ public class Ex1Point1 {
     }
 
     private static Document createDocument(JSONObject obj) {
+        FieldType textType = new FieldType();
+        textType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+        textType.setStored(true);
+        textType.setStoreTermVectors(true);
 
         Document doc = new Document();
         doc.add(new StringField("id", (String) obj.getString("id_str"), Field.Store.YES));
 
         doc.add(new StringField("created_at", (String) obj.getString("created_at"), Field.Store.YES));
-        doc.add(new TextField("text", obj.getString("text"), Field.Store.YES));
+        doc.add(new Field("text", obj.getString("text"), textType));
         doc.add(new LongPoint("retweet_count", obj.getLong("retweet_count")));
         doc.add(new LongPoint("favorite_count", obj.getLong("favorite_count")));
         doc.add(new StringField("lang", obj.getString("lang"), Field.Store.YES));
+        JSONObject user = obj.getJSONObject("user");
+        doc.add(new StringField("user_id", user.getString("id_str"), Field.Store.YES));
         JSONObject entities = obj.getJSONObject("entities");
         JSONArray userMentions = entities.getJSONArray("user_mentions");
         for(int i=0; i<userMentions.length(); i++) {
@@ -62,7 +70,7 @@ public class Ex1Point1 {
 
     public static void storeIntoLucene() throws IOException {
         Directory dir = new SimpleFSDirectory(FileSystems.getDefault().getPath("dataset_tweets"));
-        Analyzer analyzer = new StandardAnalyzer();
+        Analyzer analyzer = new EnglishAnalyzer();
         IndexWriter writer = new IndexWriter(dir, new IndexWriterConfig());
 
         BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -75,17 +83,21 @@ public class Ex1Point1 {
         while ((content = in.readLine()) != null) {
             System.out.println(count);
             count++;
+            obj = new JSONObject(content);
+            if(obj.getString("lang").toString().equals("en")) {
+                Document doc = createDocument(new JSONObject(content));
+                try {
+                    writer.addDocument(doc);
 
-            Document doc = createDocument(new JSONObject(content));
-            try {
-                writer.addDocument(doc);
-                if(count % 50000 == 0) {
-                    writer.commit();
+                    //writer.commit();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                //writer.commit();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            if(count % 50000 == 0) {
+                writer.commit();
+            }
+
         }
         writer.close();
 
