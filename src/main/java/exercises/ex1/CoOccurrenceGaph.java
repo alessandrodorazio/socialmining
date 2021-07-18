@@ -116,6 +116,34 @@ public class CoOccurrenceGaph {
             return largestCC;
         }
 
+    CoOccurrenceGaph k_core(int k) {
+        CoOccurrenceGaph graph = this;
+        ArrayList<String> nodes;
+        boolean empty=false;
+        while (!empty){
+            CoOccurrenceGaph curr_graph = new CoOccurrenceGaph();
+            nodes = new ArrayList<>();  //archi con grado minore di k
+            for (String key : graph.adj.keySet()) {
+                if (graph.adj.get(key).size() < k) {
+                    nodes.add(key);
+                }
+            }
+            for (String key : graph.adj.keySet()) {
+                if (!nodes.contains(key)) {     // se nodo non ha grado < k?
+                    for (ArrayList<String> arcs : adj.get(key)) {
+                        if (!nodes.contains(arcs.get(1))) { // se nodo to non ha grado < k
+                            curr_graph.addEdge(arcs.get(0), arcs.get(1));    //aggiungo arco
+                        }
+                    }
+                }
+            }
+            graph = curr_graph;
+            if (nodes.isEmpty()) empty=true;    //se non ci sono nodi con grado minore di k
+        }
+
+    return graph;
+    }
+
         ArrayList<ArrayList<String>> find_cc(String k) {
             Queue<ArrayList<String>> queue = new LinkedList<>();
 

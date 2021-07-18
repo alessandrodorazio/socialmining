@@ -59,7 +59,6 @@ public class EX1Point3 {
         for (HashMap<Integer, ArrayList<String>> time_window : cluster_terms_for_TimeWindow) {
 
             System.out.println("Current graph:" + current_graph);
-            //ArrayList<ArrayList<String>> analyzed_terms = new ArrayList<>();
             cooccurrence_graphs.add(new CoOccurrenceGaph());
             Directory current_cluster=getcluster(current_time_window);
 
@@ -92,10 +91,6 @@ public class EX1Point3 {
                         for (int i = 1; i<= occur; i++) {
                             cooccurrence_graphs.get(current_graph).addEdge(term, term2);
                         }
-                       /* ArrayList<String> terms = new ArrayList<>();
-                        terms.add(term);
-                        terms.add(term2);
-                        analyzed_terms.add(terms);*/
                     }
                     j++;
                 }
@@ -147,8 +142,13 @@ public class EX1Point3 {
         QueryParser parser = new QueryParser("text", analyzer);
         String query = term + " AND " + term2;
         Query q = parser.parse(query);
-        TopDocs top = is.search(q, 100000000); // perform a query and limit resultsnumber
+        TopDocs top = is.search(q, 10000); // perform a query and limit resultsnumber
         ScoreDoc[] hits = top.scoreDocs; // get only the scored documents (ScoreDoc isa tuple)
         return hits.length;
     }
 }
+//devo prendere i tweet di un arco temporale, per ogni arco temporale;
+//per ogni cluster
+//devo cercare i tweet che contengono o t1 || t2 || t3 || .. || t_dimensionecluster
+// fare una clique tra gli utenti che compaiono nella ricerca.
+//due utenti hanno un arco se se entrambi hanno fatto un post che contiene uno dei termini del cluster;
