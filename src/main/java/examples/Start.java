@@ -1,5 +1,6 @@
 package examples;
 
+import exercises.ex1.EX1Point3;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
@@ -14,8 +15,8 @@ import java.nio.file.FileSystems;
 
 public class Start {
     public static void main(String[] str) throws Throwable {
-        TweetDownloader t = new TweetDownloader("ids");
-        System.out.println("Ho finito");
+    //   TweetDownloader t = new TweetDownloader("ids");
+    //    System.out.println("Ho finito");
 /*   ID_Card[] cards = new ID_Card[2];
     cards[0] = new ID_Card();
     cards[0].Tag="CDxede431";
@@ -39,6 +40,7 @@ public class Start {
     Indexer idx = new Indexer();
     idx.indexing(cards);
 */
-
+        EX1Point3 prova = new EX1Point3();
+        System.out.println(prova.cooccurrence_graphs(prova.cluster_terms_for_TimeWindow()));
     }
 }
