@@ -147,8 +147,10 @@ public class EX1Point3 {
         return hits.length;
     }
     public static void main(String[] args) throws IOException, ParseException {
+        System.out.println("start");
         EX1Point3 prova = new EX1Point3();
         System.out.println(prova.cooccurrence_graphs(prova.cluster_terms_for_TimeWindow()));
+        System.out.println("done!");
     }
 
 }

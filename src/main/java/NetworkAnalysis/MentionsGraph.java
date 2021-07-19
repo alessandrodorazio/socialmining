@@ -77,6 +77,7 @@ public class MentionsGraph {
 
 
     public ArrayList<ArrayList<Long>> largestConnectedComponents() {
+        System.out.println("finding largest Connected Components");
         ArrayList<ArrayList<Long>> largestCC = new ArrayList<>();
         ArrayList<ArrayList<Long>> current_component = new ArrayList<>();
         //ArrayList<ArrayList<ArrayList<Long>>> components = new ArrayList<>();
@@ -94,6 +95,8 @@ public class MentionsGraph {
                 System.out.println(largestCC);
             }
         }
+        System.out.println("found!");
+
         return largestCC;
     }
 
@@ -126,6 +129,7 @@ public class MentionsGraph {
             }
 
         }
+
         return component;
     }
     public void populate(String dataset) throws IOException, ParseException {
