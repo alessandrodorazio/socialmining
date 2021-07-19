@@ -1,5 +1,9 @@
 package NetworkAnalysis;
 
+import entites.Tweet;
+import org.apache.lucene.queryparser.classic.ParseException;
+
+import java.io.IOException;
 import java.util.*;
 
 public class MentionsGraph {
@@ -72,7 +76,7 @@ public class MentionsGraph {
     }
 
 
-    ArrayList<ArrayList<Long>> largestConnectedComponents() {
+    public ArrayList<ArrayList<Long>> largestConnectedComponents() {
         ArrayList<ArrayList<Long>> largestCC = new ArrayList<>();
         ArrayList<ArrayList<Long>> current_component = new ArrayList<>();
         //ArrayList<ArrayList<ArrayList<Long>>> components = new ArrayList<>();
@@ -93,7 +97,7 @@ public class MentionsGraph {
         return largestCC;
     }
 
-    ArrayList<ArrayList<Long>> find_cc(long k) {    //is modified bfs with [ if (!component.contains(node)) component.add(node); ] in other words tree from bfs with other arcs
+    public ArrayList<ArrayList<Long>> find_cc(long k) {    //is modified bfs with [ if (!component.contains(node)) component.add(node); ] in other words tree from bfs with other arcs
         Queue<ArrayList<Long>> queue = new LinkedList<>();
 
         ArrayList<ArrayList<Long>> component = new ArrayList<>();  //una singola componente
@@ -123,5 +127,53 @@ public class MentionsGraph {
 
         }
         return component;
+    }
+    public void populate(String dataset) throws IOException, ParseException {
+        //2.1
+        System.out.println("Starting...");
+        System.out.println("Getting tweets...");
+        FindTweets ft = new FindTweets();
+        ArrayList<Tweet> tweets;
+        if (dataset.equals("find")) {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //metodo per trovare, salvare e resituire tweet (creare dataset, eseguire una volta sola quando dataset è vuoto)
+            tweets = ft.find();
+        }
+        else {
+            //metodo per recuperare e restiutire tweet (dataset gia creato, eseguire piu volte dopo ft.find)
+            tweets = ft.getTweets();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        }
+        for (Tweet t : tweets) {
+            long from = Long.parseLong(t.User_ID);
+            if (this.adj.keySet().size() >= 10000) {      //limit first 10k users
+                for (String mention : t.Mentions) {
+                    long to = Long.parseLong(mention);
+                    if (this.adj.containsKey(from) && this.adj.containsKey(to))
+                        this.addEdge(from, to);
+                }
+            } else {
+                for (String mention : t.Mentions) {
+                    long to = Long.parseLong(mention);
+                    this.addEdge(from, to);
+                }
+            }
+        }
+        // tagliare i bordi meno utili
+        MentionsGraph graph = new MentionsGraph();
+        for (long key : this.adj.keySet()) {
+            if(!this.adj.get(key).isEmpty()) graph.adj.put(key,new ArrayList<>());
+        }
+        for (long key : graph.adj.keySet()){
+            ArrayList<ArrayList<Long>> arcs = new ArrayList<>();
+            for (ArrayList<Long> arc :this.adj.get(key)){
+
+                if (graph.adj.containsKey(arc.get(1))){
+                    arcs.add(arc);
+                }
+            }
+            graph.addAllEdges(arcs);
+        }
+
     }
 }

@@ -117,7 +117,7 @@ public class TermGraph {
         return edges;
     }
 
-    ArrayList<ArrayList<Long>> largestConnectedComponents() {
+    public ArrayList<ArrayList<Long>> largestConnectedComponents() {
         ArrayList<ArrayList<Long>> largestCC = new ArrayList<>();
         ArrayList<ArrayList<Long>> current_component = new ArrayList<>();
         //ArrayList<ArrayList<ArrayList<Long>>> components = new ArrayList<>();
@@ -135,7 +135,7 @@ public class TermGraph {
         return largestCC;
     }
 
-    ArrayList<ArrayList<Long>> find_cc(long k) {
+    public ArrayList<ArrayList<Long>> find_cc(long k) {
         Queue<ArrayList<Long>> queue = new LinkedList<>();
 
         ArrayList<ArrayList<Long>> component = new ArrayList<>();  //una singola componente
@@ -186,8 +186,7 @@ public class TermGraph {
         System.out.println("ho trovato cluser per term");
      ArrayList<Tweet> tweets;
         for (Integer cluster : terms_in_cluster.keySet()){
-            System.out.println(terms_in_cluster.keySet());
-            System.out.println(cluster);
+
             tweets = new ArrayList<>(get_Tweets(dir, terms_in_cluster.get(cluster)));
             ArrayList<Long> user_ids = new ArrayList<>();
             for (Tweet tweet : tweets){
@@ -195,42 +194,47 @@ public class TermGraph {
                 if(user_ids.contains(current_user_id)) continue;
                 user_ids.add(current_user_id);
             }
-            System.out.println("ho trovato cluser per tweet");
-
+            TermGraph tg = new TermGraph();
             //faccio clique utente x utente
             //lento da ottimizzare o verficare se funziona
-            ArrayList<ArrayList<Long>> arcs = new ArrayList<>();
+            int i =0;
             for (Long user_id : user_ids){
                 for (Long user_id1 : user_ids) {
                     if (user_id1.equals(user_id)) continue;
-                    ArrayList<Long> arc = new ArrayList<>();
-                    boolean check = false;
-                    for(ArrayList<Long> arc1 : arcs){
-                        if (arc1.contains(user_id1)&&arc1.contains(user_id)){
-                            check=true;
-                            break;
-                        }
 
+                    boolean check = false;
+                    if(tg.adj.get(user_id1)!=null){
+                        for(ArrayList<Long> arc: tg.adj.get(user_id1)){
+                            if (arc.get(1).equals(user_id)){
+                                check=true;
+                                break;
+                            }
+                        }
                     }
+
                     if(check) continue;
-                    arc.add(user_id);
-                    arc.add(user_id1);
-                    arcs.add(arc);
+                    tg.addEdge(user_id,user_id1);
+                }i++;
                 }
+            for(Long key : tg.adj.keySet()){
+                for (ArrayList<Long> arc : tg.adj.get(key)){
+                    this.adj.get(key).add(arc);
                 }
-            System.out.println("ho creato archi");
-            for (ArrayList<Long> arc : arcs){       //aggiungo archi
-                this.addEdge(arc.get(0),arc.get(1));
             }
         }
 
 
 
-     //devo prendere i tweet di un arco temporale, per ogni arco temporale; ok
-//per ogni cluster
-//devo cercare i tweet che contengono o t1 || t2 || t3 || .. || t_dimensionecluster
-// fare una clique tra gli utenti che compaiono nella ricerca.
-//due utenti hanno un arco se se entrambi hanno fatto un post che contiene uno dei termini del cluster;
+        //1)devo prendere i tweet di un arco temporale, per ogni arco temporale;
+        //answer : prendo solo il primo per velocizzare
+
+        //2)per ogni cluster devo cercare i tweet che contengono o t1 || t2 || t3 || .. || t_dimensionecluster //
+        //answer: questo lo faccio con una hashmap (cluster,termini) per associare ad ogni cluster i termini e poi cerco su dataset trovato prima usando i termini nella hashmap
+
+        //3)fare una clique tra gli utenti che compaiono nella ricerca,due utenti hanno un arco se se entrambi hanno fatto un post che contiene uno dei termini del cluster;
+        //answer: creo grafo provisorio e poi aggiungo tutti i suoi archi a quello principale
+
+        //problemi: ci mette troppo a creare archi nel punto 3.
  }
     public ArrayList<Tweet> get_Tweets(Directory cluster, ArrayList<String> terms) throws IOException, ParseException {
         //reader settings
@@ -255,20 +259,12 @@ public class TermGraph {
 
         ScoreDoc[] hits = top.scoreDocs; // get only the scored documents (ScoreDoc isa tuple)
 
-        Document doc = new Document();
-        Tweet tweet = new Tweet();
+        Document doc;
+        Tweet tweet ;
         for (ScoreDoc entry : hits) {
-            doc = is.doc(entry.doc); /* the same as ir.document(entry.doc); */
-           // String[] mentions = doc.getValues("mentions");
+            doc = is.doc(entry.doc);
             tweet = new Tweet(); // pulisco tutto;
-/*
-            tweet.Created_at = doc.get("created_at");
-            tweet.Id = doc.get("id");
-            tweet.Lang = doc.get("lang");
-            tweet.Text = doc.get("text"); */
             tweet.User_ID = doc.get("user_id");
-//            tweet.Mentions = mentions;
-
             tweets.add(tweet);
         }
         return tweets;
@@ -298,7 +294,6 @@ public class TermGraph {
             writer.addDocument(doc);
         }
 
-        System.out.println("fatto");
         writer.commit();
         writer.close();
         return dir1;

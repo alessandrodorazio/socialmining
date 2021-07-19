@@ -1,10 +1,5 @@
 package NetworkAnalysis;
 
-import it.stilo.g.algo.ReachabilityScore;
-import it.stilo.g.algo.UnionDisjoint;
-import it.stilo.g.structures.DoubleValues;
-import it.stilo.g.structures.WeightedDirectedGraph;
-
 import java.util.*;
 
 public class Rank {
@@ -12,7 +7,7 @@ public class Rank {
     static long one = 1;
     static int steps = 5;
 
-    HashMap<Long, ArrayList<Long>> HITS(HashMap<Long, ArrayList<ArrayList<Long>>> graph) {
+    public HashMap<Long, ArrayList<Long>> HITS(HashMap<Long, ArrayList<ArrayList<Long>>> graph) {
         HashMap<Long, ArrayList<Long>> hits = new HashMap<>();
 
         //id, (auth, hubs score setting to one)
@@ -84,7 +79,7 @@ public class Rank {
     }
 
 
-    HashMap<Long,Integer> KP_NEG(HashMap<Long,ArrayList<ArrayList<Long>>> graph){
+    public HashMap<Long,Integer> KPP_NEG(HashMap<Long,ArrayList<ArrayList<Long>>> graph){
         HashMap<Long,Integer> result = new HashMap<>();
          // compute measure of entire graph
         int Cg = 0;
@@ -163,7 +158,7 @@ public class Rank {
     return false;
     }
 
-    HashMap<Integer,ArrayList<Long>> LPA(HashMap<Long, ArrayList<ArrayList<Long>>> graph){
+    public HashMap<Integer,ArrayList<Long>> LPA(HashMap<Long, ArrayList<ArrayList<Long>>> graph){
 
         HashMap<Integer,ArrayList<Long>> lpa_nodes = new HashMap<>();
         int initial_size=60;

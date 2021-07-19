@@ -146,6 +146,11 @@ public class EX1Point3 {
         ScoreDoc[] hits = top.scoreDocs; // get only the scored documents (ScoreDoc isa tuple)
         return hits.length;
     }
+    public static void main(String[] args) throws IOException, ParseException {
+        EX1Point3 prova = new EX1Point3();
+        System.out.println(prova.cooccurrence_graphs(prova.cluster_terms_for_TimeWindow()));
+    }
+
 }
 //devo prendere i tweet di un arco temporale, per ogni arco temporale;
 //per ogni cluster

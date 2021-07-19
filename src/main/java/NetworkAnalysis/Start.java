@@ -12,17 +12,7 @@ import java.util.Set;
 
 public class Start {
     public static void main(String[] args) throws IOException, ParseException {
-        System.out.println("Starting...");
-        System.out.println("Getting tweets...");
-        //2.1
-       // FindTweets ft = new FindTweets();
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //metodo per trovare, salvare e resituire tweet (creare dataset, eseguire una volta sola quando dataset è vuoto)
-        //ArrayList<Tweet> tweets= ft.find();
 
-        //metodo per recuperare e restiutire tweet (dataset gia creato, eseguire piu volte dopo ft.find)
-        //ArrayList<Tweet> tweets= ft.getTweets();
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         System.out.println("Done, nice");
         System.out.println("Let make some graph :D");
@@ -32,37 +22,7 @@ public class Start {
         //2.2b
 /*
         MentionsGraph  graph1 = new MentionsGraph();
-        for (Tweet t : tweets) {
-            long from = Long.parseLong(t.User_ID);
-            if (graph1.adj.keySet().size() >= 10000) {      //limit first 10k users
-                for (String mention : t.Mentions) {
-                    long to = Long.parseLong(mention);
-                    if (graph1.adj.containsKey(from) && graph1.adj.containsKey(to))
-                        graph1.addEdge(from, to);
-                }
-            } else {
-                for (String mention : t.Mentions) {
-                    long to = Long.parseLong(mention);
-                    graph1.addEdge(from, to);
-                }
-            }
-        }
-        // tagliare i bordi meno utili
-            MentionsGraph graph = new MentionsGraph();
-            for (long key : graph1.adj.keySet()) {
-                if(!graph1.adj.get(key).isEmpty()) graph.adj.put(key,new ArrayList<>());
-            }
-            for (long key : graph.adj.keySet()){
-                ArrayList<ArrayList<Long>> arcs = new ArrayList<>();
-                for (ArrayList<Long> arc :graph1.adj.get(key)){
 
-                    if (graph.adj.containsKey(arc.get(1))){
-                        arcs.add(arc);
-                    }
-                }
-                graph.addAllEdges(arcs);
-            }
-*/
       /*
         graph1.addEdge(1, 2);
         graph1.addEdge(2, 3);
