@@ -8,7 +8,9 @@ import java.io.IOException;
 public class Ex2Point1 {
     public static void main(String[] args) throws IOException, ParseException {
         FindTweets ft = new FindTweets();
-        ft.find();  //questo per creare dataset, crea un dataset salvato in memoria eseguirlo piu volte causa dupplicazioni
-        ft.getTweets(); //questo per leggere dataset se gia creato, in ft.find()
+        //ft.find();  //questo per creare dataset, crea un dataset salvato in memoria eseguirlo piu volte causa dupplicazioni
+        System.out.println("start");
+        System.out.println(ft.getTweets()); //questo per leggere dataset se gia creato, in ft.find()
+        System.out.println("done");
     }
 }
