@@ -183,7 +183,7 @@ public class TermGraph {
             if (!terms_in_cluster.containsKey(cluster)) terms_in_cluster.put(cluster, new ArrayList<>());
             terms_in_cluster.get(cluster).add(term);
      }
-        System.out.println("ho trovato cluser per term");
+        System.out.println("ho trovato clusers dei termini");
      ArrayList<Tweet> tweets;
         for (Integer cluster : terms_in_cluster.keySet()){
 

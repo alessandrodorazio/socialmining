@@ -40,7 +40,7 @@ public class FindTweets {
         Analyzer analyzer = new EnglishAnalyzer();
         QueryParser parser = new QueryParser("mentions", analyzer);
         Query q = parser.parse("*:*");
-        TopDocs top = is.search(q,30000000); // perform a query and limit resultsnumber
+        TopDocs top = is.search(q,3000000); // perform a query and limit resultsnumber
         ScoreDoc[] hits = top.scoreDocs; // get only the scored documents (ScoreDoc isa tuple)
 
         //writer settings

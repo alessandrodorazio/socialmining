@@ -5,7 +5,7 @@ import java.util.*;
 public class Rank {
     static long zero = 0;
     static long one = 1;
-    static int steps = 5;
+    static int steps = 2;
 
     public HashMap<Long, ArrayList<Long>> HITS(HashMap<Long, ArrayList<ArrayList<Long>>> graph) {
         HashMap<Long, ArrayList<Long>> hits = new HashMap<>();
