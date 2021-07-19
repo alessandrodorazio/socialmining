@@ -26,8 +26,11 @@ public class Ex1Point2_4 {
     /* K-Means itself, it takes a dataset and a number K and adds class numbers
      * to records in the dataset */
     public static void kmeansToClusters() throws IOException {
-        int K = 3;
+        int K;
+        int l = 0;
         for(int i=1;i<=8; i++) {
+            K = (int) (Math.ceil(countFileLines("temporal_analysis/sax/terms_filtered_time_window_" + i + ".csv") / 20) - 1);
+            System.out.println(K);
             DataSet data = new DataSet("temporal_analysis/sax/terms_filtered_time_window_" + i + ".csv");
 
             // Select K initial centroids
@@ -44,6 +47,7 @@ public class Ex1Point2_4 {
 
                 // For each record
                 for(var record : records){
+                    System.out.println("NEL FOR");
                     Double minDist = Double.MAX_VALUE;
                     // Find the centroid at a minimum distance from it and add the record to its cluster
                     for(int j = 0; j < centroids.size(); j++){
@@ -64,6 +68,7 @@ public class Ex1Point2_4 {
                     break;
                 }
                 SSE = newSSE;
+                l=l+1;
             }
             data.createCsvOutput("temporal_analysis/clusters/distances/distances_time_window_" + i + ".csv");
         }

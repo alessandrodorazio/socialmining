@@ -62,6 +62,7 @@ public class DataSet {
     }
 
     public void createCsvOutput(String outputFileName){
+        System.out.println("CSV OUTPUT");
 
         try(BufferedWriter csvWriter = new BufferedWriter(new FileWriter(outputFileName))) {
             for(int i=0; i<attrNames.size(); i++){
@@ -264,7 +265,7 @@ public class DataSet {
  class EditDistanceRecursive {
 
     static int calculate(String x, String y) {
-        System.out.println(x);
+        System.out.println(x + "CIAO" + y);
         int[][] dp = new int[x.length() + 1][y.length() + 1];
 
         for (int i = 0; i <= x.length(); i++) {

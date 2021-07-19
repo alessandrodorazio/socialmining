@@ -32,100 +32,17 @@ import java.util.*;
 
 public class Ex1Point2 {
     public static void getTermFrequencyInCollection() throws IOException, ParseException, java.text.ParseException {
-
-
         Directory dir = new SimpleFSDirectory(FileSystems.getDefault().getPath("dataset_tweets"));
         IndexReader indexReader = DirectoryReader.open(dir);
         Analyzer analyzer = new EnglishAnalyzer();
-        IndexWriterConfig cfg = new IndexWriterConfig(analyzer);
         IndexSearcher is = new IndexSearcher(indexReader);
-        QueryParser parser = new QueryParser("text", analyzer);
-        parser.setAllowLeadingWildcard(true);
 
-        Query q = parser.parse("*:*");
-        TopDocs top = is.search(q, 10); // perform a query and limit resultsnumber
-        ScoreDoc[] hits = top.scoreDocs; // get only the scored documents (ScoreDoc isa tuple)
-        Document doc;
-        /*
-        for(ScoreDoc hit: hits) {
-            System.out.println("TROVATO");
-            doc = indexReader.document(hit.doc);
-            Terms terms = indexReader.getTermVector(hit.doc, "text");
-            System.out.println(terms.toString());
-            if (terms != null && terms.size() > 0) {
-                // access the terms for this field
-                TermsEnum termsEnum = terms.iterator();
-                BytesRef term = null;
-
-                // explore the terms for this field
-                while ((term = termsEnum.next()) != null) {
-                    // enumerate through documents, in this case only one
-                    PostingsEnum docsEnum = termsEnum.postings(null);
-                    int docIdEnum;
-                    while ((docIdEnum = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
-                        // get the term frequency in the document
-                        System.out.println(term.utf8ToString()+ " " + docIdEnum + " " + docsEnum.freq());
-                    }
-                }
-            }
-        }
-        */
-        //documentsInTimeWindowsToCsv2(is, analyzer);
-        //getAllTermsForEachTimeWindow(is, indexReader);
-        //getTfForEachTerm();
-        //getIdfForEachTerm();
+        documentsInTimeWindowsToCsv(is, analyzer);
+        documentsInTimeWindowsToCsv2(is, analyzer);
+        getAllTermsForEachTimeWindow(is, indexReader);
+        getTfForEachTerm();
+        getIdfForEachTerm();
         calculateTfIdfForEachTerm();
-
-        /*
-        int hitsPerPage = 1000;
-        int totalHitsThreshold = 10000000;
-        TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, totalHitsThreshold);
-        getTokensForField(indexReader, "created_at"); */
-
-        /*
-        Query query = new QueryParser("text", analyzer).parse("covid");
-        IndexSearcher searcher = new IndexSearcher(indexReader);
-        searcher.setSimilarity(TfIdf);
-        TopDocs results = searcher.search(query, 100); // or whatever you need instead of 100
-        ScoreDoc[] hits2 = results.scoreDocs;
-        for (ScoreDoc hit : hits2) {
-            getExplanation(searcher, query, hit.doc);
-        } */
-
-    }
-
-    private static void getExplanation(IndexSearcher searcher, Query query, int docID) throws IOException {
-        Explanation explanation = searcher.explain(query, docID);
-        System.out.println(explanation.toString());
-        explanation.getDescription();
-        explanation.getDetails();
-
-        //explanation.getDescription(); // do what you need with this data
-        //explanation.getDetails();     // do what you need with this data
-    }
-
-    private static void getTokensForField(IndexReader reader, String fieldName) throws IOException {
-        List<LeafReaderContext> list = reader.leaves();
-        Similarity similarity = new ClassicSimilarity();
-        long count = 0;
-        int docnum = reader.numDocs();
-
-        for (LeafReaderContext lrc : list) {
-            System.out.println(lrc.toString());
-            Terms terms = lrc.reader().terms(fieldName);
-            if (terms != null) {
-                TermsEnum termsEnum = terms.iterator();
-                BytesRef term;
-                while ((term = termsEnum.next()) != null) {
-                    count++;
-                    double tf = termsEnum.totalTermFreq() / terms.size();
-                    double idf = Math.log(docnum / termsEnum.docFreq());
-                    //System.out.println(term.utf8ToString() + "\tTF: " + tf + "\tIDF: " + idf);
-                }
-            }
-        }
-        System.out.println("CONTEGGIO TERM");
-        System.out.println(count);
     }
 
     public static void documentsInTimeWindowsToCsv(IndexSearcher is, Analyzer analyzer) throws ParseException, IOException, java.text.ParseException {
