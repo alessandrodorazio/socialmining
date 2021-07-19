@@ -218,7 +218,7 @@ public class TermGraph {
                 }
             for(Long key : tg.adj.keySet()){
                 for (ArrayList<Long> arc : tg.adj.get(key)){
-                    this.adj.get(key).add(arc);
+                    this.addEdge(arc.get(0),arc.get(1));
                 }
             }
         }
@@ -255,7 +255,7 @@ public class TermGraph {
 
         ArrayList<Tweet> tweets= new ArrayList<>();
         Query q = parser.parse(query.toString());
-        TopDocs top = is.search(q, 10000); // perform a query and limit resultsnumber
+        TopDocs top = is.search(q, 500); // perform a query and limit resultsnumber
 
         ScoreDoc[] hits = top.scoreDocs; // get only the scored documents (ScoreDoc isa tuple)
 
